@@ -1,21 +1,21 @@
-team_id,league_id,team_name
-1001,5001,Roaring Kitties
-1002,5001,Pigskin Party
-1003,5001,Dallas Steers
-1004,5001,Never Gonna Give Up
-1005,5001,Fighting Catfish
-1006,5001,Wallaby Stew
-1007,5001,Checkers Not Chess
-1008,5001,Defending Champs
-1009,5001,Team Generic
-1010,5001,Fumblerooski
-1011,5001,Double Option
-1012,5001,Wicked Awesome
-1013,5002,The Gridiron Goons
-1014,5002,Fourth and Gronk
-1015,5002,Sunday Mudslingers
-1016,5002,Couch Potatoes
-1017,5002,Draft Day Dummies
-1018,5002,Endzone Pirates
-1019,5002,Blitz Platoon
-1020,5002,The Pigskin Pranksters
+team_id,team_name,league_id
+1001,Roaring Kitties,5001
+1002,Pigskin Party,5001
+1003,Dallas Steers,5001
+1004,Never Gonna Give Up,5001
+1005,Fighting Catfish,5001
+1006,Wallaby Stew,5001
+1007,Checkers Not Chess,5001
+1008,Defending Champs,5001
+1009,Team Generic,5001
+1010,Fumblerooski,5001
+1011,Double Option,5001
+1012,Wicked Awesome,5001
+1013,The Gridiron Goons,5002
+1014,Fourth and Gronk,5002
+1015,Sunday Mudslingers,5002
+1016,Couch Potatoes,5002
+1017,Draft Day Dummies,5002
+1018,Endzone Pirates,5002
+1019,Blitz Platoon,5002
+1020,The Pigskin Pranksters,5002
