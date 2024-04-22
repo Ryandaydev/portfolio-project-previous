@@ -159,7 +159,6 @@ performance_id,week_number,fantasy_points,player_id
 258,2023_2,14.3,179
 259,2023_1,11.0,180
 260,2023_2,13.7,180
-performance_id,week_number,fantasy_points,player_id
 261,2023_1,23.1,181
 262,2023_2,12.4,181
 263,2023_1,18.3,182
@@ -200,7 +199,6 @@ performance_id,week_number,fantasy_points,player_id
 298,2023_2,9.6,199
 299,2023_1,17.3,200
 300,2023_2,12.9,200
-performance_id,week_number,fantasy_points,player_id
 301,2023_1,8.5,201
 302,2023_2,21.3,201
 303,2023_1,15.2,202

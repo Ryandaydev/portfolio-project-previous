@@ -50,7 +50,7 @@ player_id,first_name,last_name
 149,CeeDee,Lamb
 150,Ja'Marr,Chase
 151,Tee,Higgins
-152,Michael,Pittman Jr.
+152,Jaxon,Smith-Njigba
 153,DK,Metcalf
 154,Terry,McLaurin
 155,Amari,Cooper
@@ -59,7 +59,6 @@ player_id,first_name,last_name
 158,Calvin,Ridley
 159,Adam,Thielen
 160,AJ,Brown
-player_id,first_name,last_name
 161,Derrick,Henry
 162,Christian,McCaffrey
 163,Dalvin,Cook
@@ -80,7 +79,6 @@ player_id,first_name,last_name
 178,David,Montgomery
 179,Miles,Sanders
 180,Devin,Singletary
-player_id,first_name,last_name
 181,Rashaad,Penny
 182,D'Andre,Swift
 183,Chris,Carson
@@ -101,7 +99,6 @@ player_id,first_name,last_name
 198,Alexander,Mattison
 199,Gus,Edwards
 200,Mark,Ingram
-player_id,first_name,last_name
 201,DeVonta,Smith
 202,Jerry,Jeudy
 203,Chase,Claypool
@@ -109,7 +106,7 @@ player_id,first_name,last_name
 205,Michael,Thomas
 206,DJ,Moore
 207,Julio,Jones
-208,Odell,Beckham Jr.
+208,Jordan,Addison
 209,Will,Fuller
 210,Curtis,Samuel
 211,Corey,Davis
@@ -139,6 +136,6 @@ player_id,first_name,last_name
 235,Gerald,Everett
 236,Dawson,Knox
 237,Logan,Thomas
-238,Irv,Smith Jr.
+238,Sam,LaPorta
 239,Tyler,Higbee
 240,David,Njoku
