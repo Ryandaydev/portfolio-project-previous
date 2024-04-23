@@ -48,7 +48,7 @@ player_id,first_name,last_name,position
 147,Mike,Evans,WR
 148,Keenan,Allen,WR
 149,CeeDee,Lamb,WR
-150,Ja'Marr,Chase,WR
+150,Jalen, Waddle,WR
 151,Tee,Higgins,WR
 152,Jaxon,Smith-Njigba,WR
 153,DK,Metcalf,WR
@@ -80,7 +80,7 @@ player_id,first_name,last_name,position
 179,Miles,Sanders,RB
 180,Devin,Singletary,RB
 181,Rashaad,Penny,RB
-182,D'Andre,Swift,RB
+182,Breece,Hall,RB
 183,Chris,Carson,RB
 184,Tony,Pollard,RB
 185,Chase,Edmonds,RB
@@ -115,7 +115,7 @@ player_id,first_name,last_name,position
 214,Sterling,Shepard,WR
 215,Allen,Lazard,WR
 216,Tim,Patrick,WR
-217,Tre'Quan,Smith,WR
+217,Amon-Ra,St. Brown,WR
 218,Parris,Campbell,WR
 219,Christian,Kirk,WR
 220,Robby,Anderson,WR
