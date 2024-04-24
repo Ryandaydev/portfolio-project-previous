@@ -1,5 +1,5 @@
 """SQLAlchemy models"""
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float, DATE
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, Date
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -11,8 +11,14 @@ class Player(Base):
     player_id = Column(Integer, primary_key=True, index=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
+    position = Column(String, nullable=False)
+    last_changed_date = Column(Date, nullable=False)
 
     performances = relationship("Performance", back_populates="player")
+
+
+    # Many-to-many relationship between Player and Team tables
+    teams = relationship("Team", secondary="team_player", back_populates="players")    
 
 
 class Performance(Base):
@@ -21,6 +27,7 @@ class Performance(Base):
     performance_id = Column(Integer, primary_key=True, index=True)
     week_number = Column(String, nullable=False)
     fantasy_points = Column(Float, nullable=False)
+    last_changed_date = Column(Date, nullable=False)
 
     player_id = Column(Integer, ForeignKey("player.player_id"))
 
@@ -33,6 +40,7 @@ class League(Base):
     league_id = Column(Integer, primary_key=True, index=True)
     league_name = Column(String, nullable=False)
     scoring_type = Column(String, nullable=False)
+    last_changed_date = Column(Date, nullable=False)
 
     teams = relationship("Team", back_populates="league")
 
@@ -42,6 +50,7 @@ class Team(Base):
 
     team_id = Column(Integer, primary_key=True, index=True)
     team_name = Column(String, nullable=False)
+    last_changed_date = Column(Date, nullable=False)    
 
     league_id = Column(Integer, ForeignKey("league.league_id"))
 
@@ -54,6 +63,4 @@ class TeamPlayer(Base):
 
     team_id = Column(Integer, ForeignKey("team.team_id"), primary_key=True, index=True)
     player_id = Column(Integer, ForeignKey("player.player_id"), primary_key=True, index=True)
-
-# Many-to-many relationship between Player and Team tables
-Player.teams = relationship("Team", secondary="team_player", back_populates="players")
+    last_changed_date = Column(Date, nullable=False)    
