@@ -1,13 +1,12 @@
-"""Testing SQLAlchemy Models"""
+"""Testing SQLAlchemy Helper Functions"""
 import pytest
-from sqlalchemy.orm import Session
+from datetime import date
 
-import crud, models
-from database import SessionLocal, engine
+import crud
+from database import SessionLocal
 
-from datetime import date, timedelta
-
-test_date = date(2024,4,4)
+# use a test date of 4/1/2024 to test the min_last_changed_date.
+test_date = date(2024,4,1)
 
 @pytest.fixture(scope="function")
 def db_session():
@@ -21,15 +20,15 @@ def test_get_players(db_session):
     players = crud.get_players(db_session, skip=0, limit=500, min_last_changed_date=test_date)
     assert len(players) == 160
 
-def test_get_performances(db_session):
-    """Tests that the count of performances in the database is what is expected - half the performances"""
-    performances = crud.get_performances(db_session, skip=0, limit=500, min_last_changed_date=test_date)
-    assert len(performances) == 160
-
 def test_get_performances_by_earlier_date(db_session):
     """Tests that the count of performances in the database is what is expected - all the performances"""
     performances = crud.get_performances(db_session, skip=0, limit=500, min_last_changed_date=date(2024,1,1))
     assert len(performances) == 320
+
+def test_get_performances(db_session):
+    """Tests that the count of performances in the database is what is expected - half the performances"""
+    performances = crud.get_performances(db_session, skip=0, limit=500, min_last_changed_date=test_date)
+    assert len(performances) == 160
 
 def test_get_leagues(db_session):
     """Tests that the count of leagues in the database is what is expected"""
