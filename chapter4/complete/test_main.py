@@ -15,11 +15,15 @@ def test_read_players():
     assert response.status_code == 200
     assert len(response.json()) == 550
 
+
 #test /v0/players/{player_id}/
 def test_read_players_with_id():
     response = client.get("/v0/players/101/")
     assert response.status_code == 200
     assert response.json().get("player_id") == 101
+
+
+
 
 #test /v0/performances/
 def test_read_performances():
