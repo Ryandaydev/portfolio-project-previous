@@ -15,6 +15,16 @@ def db_session():
     yield session
     session.close()
 
+def test_get_player(db_session):
+    """Tests you can get the first player"""
+    player = crud.get_player(db_session, player_id = 101)
+    assert player.player_id == 101
+
+def test_get_player_by_gsis_id(db_session):
+    """Tests you can query by gsis_id"""
+    player = crud.get_player_by_gsis_id(db_session, gsis_id = '00-0036389')
+    assert player.last_name == 'Hurts'
+
 def test_get_players(db_session):
     """Tests that the count of players in the database is what is expected"""
     players = crud.get_players(db_session, skip=0, limit=10000, min_last_changed_date=test_date)

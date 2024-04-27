@@ -17,6 +17,7 @@ class Performance(BaseModel):
 class PlayerBase(BaseModel):
     model_config = ConfigDict(from_attributes = True)    
     player_id : int
+    gsis_id: str
     first_name : str
     last_name : str
     position : str
