@@ -11,9 +11,9 @@ def test_read_main():
 
 #test /v0/players/
 def test_read_players():
-    response = client.get("/v0/players/?skip=0&limit=300")
+    response = client.get("/v0/players/?skip=0&limit=10000")
     assert response.status_code == 200
-    assert len(response.json()) == 160
+    assert len(response.json()) == 550
 
 #test /v0/players/{player_id}/
 def test_read_players_with_id():
@@ -23,15 +23,15 @@ def test_read_players_with_id():
 
 #test /v0/performances/
 def test_read_performances():
-    response = client.get("/v0/performances/?skip=0&limit=500")
+    response = client.get("/v0/performances/?skip=0&limit=10000")
     assert response.status_code == 200
-    assert len(response.json()) == 320
+    assert len(response.json()) == 1100
 
 #test /v0/performances/ with changed date
 def test_read_performances_by_date():
-    response = client.get("/v0/performances/?skip=0&limit=500&minimum_last_changed_date=2024-04-01")
+    response = client.get("/v0/performances/?skip=0&limit=10000&minimum_last_changed_date=2024-04-01")
     assert response.status_code == 200
-    assert len(response.json()) == 160
+    assert len(response.json()) == 550
 
 #test /v0/leagues/
 def test_read_leagues():
