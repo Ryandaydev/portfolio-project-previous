@@ -47,3 +47,8 @@ class League(BaseModel):
     scoring_type : str
     last_changed_date : date
     teams: List[TeamBase] = []
+
+class Counts(BaseModel):
+    league_count : int
+    team_count : int
+    player_count : int

@@ -50,15 +50,10 @@ def read_teams(skip: int = 0, limit: int = 100, minimum_last_changed_date: date 
     return teams
 
 
-@app.get("/v0/counts/{items_to_count}", response_model=int)
-def get_count(items_to_count: str, db: Session = Depends(get_db)):
-    items_to_count = items_to_count.lower()
-    if items_to_count == 'players':
-        count = crud.get_player_count(db)
-    elif items_to_count == 'leagues':
-        count = crud.get_league_count(db)
-    elif items_to_count == 'teams':
-        count = crud.get_team_count(db)
-    else:
-        raise HTTPException(status_code=400, detail="Invalid value for item_to_count")
-    return count
+@app.get("/v0/counts/", response_model=schemas.Counts)
+def get_count(db: Session = Depends(get_db)):
+    counts = schemas.Counts(
+        league_count = crud.get_league_count(db),
+        team_count = crud.get_team_count(db),
+        player_count = crud.get_player_count(db))
+    return counts
