@@ -48,3 +48,17 @@ def read_leagues(skip: int = 0, limit: int = 100, minimum_last_changed_date: dat
 def read_teams(skip: int = 0, limit: int = 100, minimum_last_changed_date: date = None, team_name: str = None, db: Session = Depends(get_db)):
     teams = crud.get_teams(db, skip=skip, limit=limit, min_last_changed_date=minimum_last_changed_date, team_name=team_name)
     return teams
+
+
+@app.get("/v0/counts/{items_to_count}", response_model=int)
+def get_count(items_to_count: str, db: Session = Depends(get_db)):
+    items_to_count = items_to_count.lower()
+    if items_to_count == 'players':
+        count = crud.get_player_count(db)
+    elif items_to_count == 'leagues':
+        count = crud.get_league_count(db)
+    elif items_to_count == 'teams':
+        count = crud.get_team_count(db)
+    else:
+        raise HTTPException(status_code=400, detail="Invalid value for item_to_count")
+    return count

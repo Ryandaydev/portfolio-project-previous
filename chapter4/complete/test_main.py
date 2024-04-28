@@ -50,3 +50,25 @@ def test_read_teams():
     response = client.get("/v0/teams/?skip=0&limit=500")
     assert response.status_code == 200
     assert len(response.json()) == 20
+
+#test the count functions
+def test_get_player_count():
+    response = client.get("/v0/counts/Players")
+    assert response.status_code == 200    
+    assert response.json() == 550
+
+def test_get_team_count():
+    response = client.get("/v0/counts/teams")
+    assert response.status_code == 200    
+    assert response.json() == 20
+
+def test_get_league_count():
+    response = client.get("/v0/counts/lEAGues")
+    assert response.status_code == 200    
+    assert response.json() == 5
+
+def test_bad_count_item():
+    response = client.get("/v0/counts/peformances")
+    assert response.status_code == 400
+    assert response.json()['detail'] == "Invalid value for item_to_count"
+
