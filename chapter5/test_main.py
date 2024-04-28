@@ -50,3 +50,14 @@ def test_read_teams():
     response = client.get("/v0/teams/?skip=0&limit=500")
     assert response.status_code == 200
     assert len(response.json()) == 20
+
+#test the count functions
+def test_counts():
+    response = client.get("/v0/counts/")
+    response_data = response.json()
+    assert response.status_code == 200    
+    assert response_data['league_count'] == 5
+    assert response_data['team_count'] == 20
+    assert response_data['player_count'] == 550
+
+

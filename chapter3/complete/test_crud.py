@@ -52,3 +52,16 @@ def test_get_team_players(db_session):
     """Tests that a team record can retrieve players, and that 8 players are on the first team"""
     first_team = crud.get_teams(db_session, skip=0, limit=1000, min_last_changed_date=test_date)[0]
     assert len(first_team.players) == 7
+
+#test the count functions
+def test_get_player_count(db_session):
+    player_count = crud.get_player_count(db_session)
+    assert player_count == 550
+
+def test_get_team_count(db_session):
+    team_count = crud.get_team_count(db_session)
+    assert team_count == 20
+
+def test_get_league_count(db_session):
+    league_count = crud.get_league_count(db_session)
+    assert league_count == 5
