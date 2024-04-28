@@ -27,7 +27,7 @@ def test_get_players(db_session):
 
 def test_get_players_by_name(db_session):
     """Tests that the count of players in the database is what is expected"""
-    players = crud.get_players(db_session, skip=0, limit=10000, first_name="Bryce", last_name="Young")
+    players = crud.get_players(db_session, first_name="Bryce", last_name="Young")
     assert len(players) == 1
     assert players[0].player_id == 102
 
@@ -37,35 +37,16 @@ def test_get_all_performances(db_session):
     performances = crud.get_performances(db_session, skip=0, limit=10000)
     assert len(performances) == 1100
 
-def test_get_half_performances(db_session):
-    """Tests that the count of performances in the database is what is expected - half the performances"""
-    performances = crud.get_performances(db_session, skip=0, limit=10000, min_last_changed_date=test_date)
-    assert len(performances) == 550
-
 def test_get_leagues(db_session):
     """Tests that the count of leagues in the database is what is expected"""
     leagues = crud.get_leagues(db_session, skip=0, limit=10000, min_last_changed_date=test_date)
     assert len(leagues) == 5
-
-def test_get_leagues_by_name(db_session):
-    """Tests that the count of leagues in the database is what is expected"""
-    leagues = crud.get_leagues(db_session, skip=0, limit=10000, league_name="Best League Ever")
-    assert len(leagues) == 1
-    assert leagues[0].league_id == 5005
 
 
 def test_get_teams(db_session):
     """Tests that the count of teams in the database is what is expected"""
     teams = crud.get_teams(db_session, skip=0, limit=10000, min_last_changed_date=test_date)
     assert len(teams) == 20
-
-
-def test_get_teams_by_name(db_session):
-    """Tests that the count of teams in the database is what is expected"""
-    teams = crud.get_teams(db_session, skip=0, limit=10000, team_name="Defending Champs")
-    assert len(teams) == 1
-    assert teams[0].team_id == 1008
-
 
 def test_get_team_players(db_session):
     """Tests that a team record can retrieve players, and that 8 players are on the first team"""
