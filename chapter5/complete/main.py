@@ -44,7 +44,7 @@ def get_db():
         summary="Check to see if the SWC fantasy football API is running",
         description='''Use this endpoint to check if the API is running. You can also check it first before making other calls to be sure it's running.''',
         response_description="A JSON record with a message in it. If the API is running the message will say successful.",
-        operation_id="v0_get_players",
+        operation_id="v0_health_check",
         tags=["analytics"])
 async def root():
     return {"message": "API health check successful"}
@@ -132,7 +132,7 @@ def read_teams(skip: int = Query(0, description="The number of items to skip at 
         summary="Get counts of the number of leagues, teams, and players in the SWC fantasy football",
         description='''Use this endpoint to count the number of leagues, teams, and players in the SWC fantasy football. You can use this if you want to know the values to use for skip and limit in v0_get leagues, v0_get_teams, or v0_get_players. If you want to know counts of records, use this endpoint instead of making calls to the other APIs and counting the results.''',
         response_description="A list of teams on the SWC fantasy football website.",
-        operation_id="v0_get_teams",
+        operation_id="v0_get_counts",
         tags=["analytics"])
 def get_count(db: Session = Depends(get_db)):
     counts = schemas.Counts(
