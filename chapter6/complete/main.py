@@ -47,7 +47,7 @@ def get_db():
         operation_id="v0_health_check",
         tags=["analytics"])
 async def root():
-    return {"message": "Health check successful"}
+    return {"message": "API health check successful"}
 
 
 @app.get("/v0/players/", 
