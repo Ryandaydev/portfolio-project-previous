@@ -43,7 +43,7 @@ def get_db():
 @app.get("/",
         summary="Check to see if the SWC fantasy football API is running",
         description='''Use this endpoint to check if the API is running. You can also check it first before making other calls to be sure it's running.''',
-        response_description="A JSON record with a message in it. If the API is running the message will say successful.",
+        response_description="A JSON record with a message in it. If the API is running the message will say heath check successful.",
         operation_id="v0_health_check",
         tags=["analytics"])
 async def root():
