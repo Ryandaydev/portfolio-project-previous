@@ -1,4 +1,4 @@
-"""FastAPI program - Chapter 6"""
+"""FastAPI program - Chapter 5"""
 from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlalchemy.orm import Session
 from datetime import date
@@ -47,7 +47,7 @@ def get_db():
         operation_id="v0_health_check",
         tags=["analytics"])
 async def root():
-    return {"message": "API health check successful --testing Render change"}
+    return {"message": "API health check successful"}
 
 
 @app.get("/v0/players/", 
