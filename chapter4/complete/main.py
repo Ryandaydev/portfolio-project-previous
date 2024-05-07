@@ -40,7 +40,7 @@ def read_performances(skip: int = 0, limit: int = 100, minimum_last_changed_date
     return performances
 
 @app.get("/v0/leagues/{league_id}", response_model=schemas.League)
-def read_leagues(league_id: int,db: Session = Depends(get_db)):
+def read_league(league_id: int,db: Session = Depends(get_db)):
     league = crud.get_league(db, league_id = league_id)
     if league is None:
         raise HTTPException(status_code=404, detail="League not found")
