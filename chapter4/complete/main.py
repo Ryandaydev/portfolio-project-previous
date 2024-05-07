@@ -53,8 +53,8 @@ def read_leagues(skip: int = 0, limit: int = 100, minimum_last_changed_date: dat
     return leagues
 
 @app.get("/v0/teams/", response_model=list[schemas.Team])
-def read_teams(skip: int = 0, limit: int = 100, minimum_last_changed_date: date = None, team_name: str = None, db: Session = Depends(get_db)):
-    teams = crud.get_teams(db, skip=skip, limit=limit, min_last_changed_date=minimum_last_changed_date, team_name=team_name)
+def read_teams(skip: int = 0, limit: int = 100, minimum_last_changed_date: date = None, team_name: str = None, league_id: int = None, db: Session = Depends(get_db)):
+    teams = crud.get_teams(db, skip=skip, limit=limit, min_last_changed_date=minimum_last_changed_date, team_name=team_name, league_id=league_id)
     return teams
 
 
