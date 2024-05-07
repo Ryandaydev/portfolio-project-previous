@@ -43,7 +43,7 @@ def get_db():
 @app.get("/",
         summary="Check to see if the SWC fantasy football API is running",
         description='''Use this endpoint to check if the API is running. You can also check it first before making other calls to be sure it's running.''',
-        response_description="A JSON record with a message in it. If the API is running the message will say heath check successful.",
+        response_description="A JSON record with a message in it. If the API is running the message will say successful.",
         operation_id="v0_health_check",
         tags=["analytics"])
 async def root():
@@ -95,6 +95,21 @@ def read_performances(skip: int = Query(0, description="The number of items to s
                       db: Session = Depends(get_db)):
     performances = crud.get_performances(db, skip=skip, limit=limit, min_last_changed_date=minimum_last_changed_date)
     return performances
+
+
+@app.get("/v0/leagues/{league_id}", 
+        response_model=schemas.League,
+        summary="Get one league by league id",
+        description='''Use this endpoint to get a single league that matches the league ID provided by the user.''',
+        response_description="An SWC league",
+        operation_id="v0_get_league_by_league_id",
+        tags=["membership"])
+def read_leagues(league_id: int,db: Session = Depends(get_db)):
+    league = crud.get_league(db, league_id = league_id)
+    if league is None:
+        raise HTTPException(status_code=404, detail="League not found")
+    return league
+
 
 @app.get("/v0/leagues/", 
         response_model=list[schemas.League],

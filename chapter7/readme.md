@@ -1,1 +1,1 @@
-# Chapter 7 - Creating An APK
+# Chapter 7 - Creating An SDK

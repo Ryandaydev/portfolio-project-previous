@@ -39,6 +39,12 @@ def test_read_performances_by_date():
     assert response.status_code == 200
     assert len(response.json()) == 550
 
+#test /v0/leagues/{league_id}/
+def test_read_leagues_with_id():
+    response = client.get("/v0/leagues/5002/")
+    assert response.status_code == 200
+    assert len(response.json()['teams']) == 8
+
 #test /v0/leagues/
 def test_read_leagues():
     response = client.get("/v0/leagues/?skip=0&limit=500")
