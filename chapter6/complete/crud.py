@@ -38,12 +38,14 @@ def get_leagues(db: Session, skip: int = 0, limit: int = 100, min_last_changed_d
     return query.offset(skip).limit(limit).all()
 
 
-def get_teams(db: Session, skip: int = 0, limit: int = 100, min_last_changed_date: date = None, team_name: str = None):
+def get_teams(db: Session, skip: int = 0, limit: int = 100, min_last_changed_date: date = None, team_name: str = None, league_id: int = None):
     query = db.query(models.Team)
     if min_last_changed_date:
         query = query.filter(models.Team.last_changed_date >= min_last_changed_date)
     if team_name: 
-        query = query.filter(models.Team.team_name == team_name)             
+        query = query.filter(models.Team.team_name == team_name)
+    if league_id: 
+        query = query.filter(models.Team.league_id == league_id)
     return query.offset(skip).limit(limit).all()    
 
 #analytics queries
