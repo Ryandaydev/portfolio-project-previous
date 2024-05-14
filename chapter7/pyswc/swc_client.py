@@ -30,15 +30,6 @@ class SWC_Client:
         #what do I return if anything?
         return response
 
-    def get_leagues_no_wrapper(self):
-        #initial logging message
-        self.logger.debug("Entered get leagues")        
-        #call the API to real leagues
-        response = httpx.get(self.swc_base_url + self.GET_LEAGUES_ENDPOINT)
-
-        #what do I return if anything?
-        return response
-
     def get_leagues(self):
         #initial logging message
         self.logger.debug("Entered get leagues")        
@@ -62,14 +53,3 @@ class SWC_Client:
         #return response
         wrappedResponse = LeagueWrapper(http_response_code = response.status_code, response_league = League(** response.json()))
         return wrappedResponse
-
-
-    # def get_league_by_id(self, league_id: int):
-    #     #initial logging message
-    #     self.logger.debug("Entered get league by ID")        
-    #     #call the API to real league
-    #     response = httpx.get(f"{self.swc_base_url}{self.GET_LEAGUES_ENDPOINT}{league_id}")
-    #     self.logger.debug(response.json())        
-    #     #what do I return if anything?
-    #     #return response
-    #     return League(** response.json())

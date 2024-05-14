@@ -15,25 +15,12 @@ def test_health_check():
     assert response.status_code == 200
     assert response.json() == {"message": "API health check successful"}
 
-def test_get_leagues_without_wrapper():
-    """Tests get leagues from SDK -- no wrapper"""
-    response = client.get_leagues_no_wrapper()
-    assert response.status_code == 200
-    assert len(response.json()) == 5
-
 def test_get_leagues():
     """Tests get leagues from SDK"""
     leagues_response = client.get_leagues()
     assert isinstance(leagues_response, LeaguesWrapper)
     assert leagues_response.http_response_code == 200
     assert len(leagues_response.response_leagues) == 5
-
-# def test_get_league_by_id():
-#     """Tests get leagues from SDK"""
-#     league_response = client.get_league_by_id(5002)
-#     #assert response.status_code == 200
-#     assert isinstance(league_response, League)
-#     assert len(league_response.teams) == 8
 
 
 def test_get_league_by_id_():
