@@ -3,6 +3,7 @@ import httpx
 import pyswc.swc_config as config
 import logging
 from .schemas.sdk_schemas import League, LeagueWrapper, LeaguesWrapper
+from .errors.swc_error import SWCError
 
 class SWC_Client:
     HEALTH_CHECK_ENDPOINT = "/"
@@ -20,14 +21,13 @@ class SWC_Client:
         self.logger = logging.getLogger(__name__)
         self.timeout = input_config.swc_timeout
 
-
-
     def health_check(self):
         #initial logging message
         self.logger.debug("Entered health check")
         #call the health check
-        response = httpx.get(self.swc_base_url + self.HEALTH_CHECK_ENDPOINT)
-        #what do I return if anything?
+        with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
+            response = client.get(self.HEALTH_CHECK_ENDPOINT).raise_for_status()
+        self.logger.debug(response.json())        
         return response
 
     def get_leagues(self):
@@ -35,21 +35,25 @@ class SWC_Client:
         self.logger.debug("Entered get leagues")        
         #call the API to real league, raise error for non-200 response
         with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
-            response = client.get(self.GET_LEAGUES_ENDPOINT)
+            response = client.get(self.GET_LEAGUES_ENDPOINT).raise_for_status()
         self.logger.debug(response.json())
-        #return response
         responseLeagues = [League(**league) for league in response.json()]
-        self.logger.debug(f"response code: {response.status_code}")     
         wrappedResponse = LeaguesWrapper(http_response_code = response.status_code, response_leagues = responseLeagues)
         return wrappedResponse
 
     def get_league_by_id(self, league_id: int):
         #initial logging message
         self.logger.debug("Entered get league by ID")        
-        #call the API to real league, raise error for non-200 response
+        #call the API to real league
         with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
             response = client.get(f"{self.GET_LEAGUES_ENDPOINT}{league_id}")
-        self.logger.debug(response.json())
-        #return response
-        wrappedResponse = LeagueWrapper(http_response_code = response.status_code, response_league = League(** response.json()))
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug(response.json())
+            wrappedResponse = LeagueWrapper(http_response_code = response.status_code, response_league = League(** response.json()))
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
         return wrappedResponse

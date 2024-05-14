@@ -3,9 +3,11 @@ import pytest
 from pyswc import SWC_Client
 from pyswc import SWC_Config
 from ..schemas.sdk_schemas import LeagueWrapper, LeaguesWrapper
+from ..errors.swc_error import SWCError
 
 
-config = SWC_Config("https://swc-api-container.86jt1rvv5bo8k.us-west-2.cs.amazonlightsail.com")
+#config = SWC_Config("https://swc-api-container.86jt1rvv5bo8k.us-west-2.cs.amazonlightsail.com")
+config = SWC_Config(timeout=10.0)
 
 client = SWC_Client(config)
 
@@ -25,7 +27,11 @@ def test_get_leagues():
 
 def test_get_league_by_id_():
     """Tests get leagues from SDK"""
-    wrapped_league_response = client.get_league_by_id(5002)
+    try: 
+        wrapped_league_response = client.get_league_by_id(5002)
+    except SWCError as e:
+        raise(e)
+    
     #assert response.status_code == 200
     assert isinstance(wrapped_league_response, LeagueWrapper)
     assert wrapped_league_response.http_response_code == 200
