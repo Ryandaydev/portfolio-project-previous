@@ -2,7 +2,7 @@
 import httpx
 import pyswc.swc_config as config
 import logging
-from .schemas.sdk_schemas import League, LeagueWrapper
+from .schemas.sdk_schemas import League, LeagueWrapper, LeaguesWrapper
 
 class SWC_Client:
     HEALTH_CHECK_ENDPOINT = "/"
@@ -30,7 +30,7 @@ class SWC_Client:
         #what do I return if anything?
         return response
 
-    def get_leagues(self):
+    def get_leagues_no_wrapper(self):
         #initial logging message
         self.logger.debug("Entered get leagues")        
         #call the API to real leagues
@@ -39,19 +39,22 @@ class SWC_Client:
         #what do I return if anything?
         return response
 
+    def get_leagues(self):
+        #initial logging message
+        self.logger.debug("Entered get leagues")        
+        #call the API to real league, raise error for non-200 response
+        with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
+            response = client.get(self.GET_LEAGUES_ENDPOINT)
+        self.logger.debug(response.json())
+        #return response
+        responseLeagues = [League(**league) for league in response.json()]
+        self.logger.debug(f"response code: {response.status_code}")     
+        wrappedResponse = LeaguesWrapper(http_response_code = response.status_code, response_leagues = responseLeagues)
+        return wrappedResponse
+
     def get_league_by_id(self, league_id: int):
         #initial logging message
         self.logger.debug("Entered get league by ID")        
-        #call the API to real league
-        response = httpx.get(f"{self.swc_base_url}{self.GET_LEAGUES_ENDPOINT}{league_id}")
-        self.logger.debug(response.json())        
-        #what do I return if anything?
-        #return response
-        return League(** response.json())
-
-    def get_league_by_id_with_wrapper(self, league_id: int):
-        #initial logging message
-        self.logger.debug("Entered get league by ID with wrapper")        
         #call the API to real league, raise error for non-200 response
         with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
             response = client.get(f"{self.GET_LEAGUES_ENDPOINT}{league_id}")
@@ -59,3 +62,14 @@ class SWC_Client:
         #return response
         wrappedResponse = LeagueWrapper(http_response_code = response.status_code, response_league = League(** response.json()))
         return wrappedResponse
+
+
+    # def get_league_by_id(self, league_id: int):
+    #     #initial logging message
+    #     self.logger.debug("Entered get league by ID")        
+    #     #call the API to real league
+    #     response = httpx.get(f"{self.swc_base_url}{self.GET_LEAGUES_ENDPOINT}{league_id}")
+    #     self.logger.debug(response.json())        
+    #     #what do I return if anything?
+    #     #return response
+    #     return League(** response.json())
