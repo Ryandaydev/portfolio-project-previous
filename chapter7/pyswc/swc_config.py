@@ -1,13 +1,15 @@
 #configuration file
 import logging
 
+default_url = "https://api.sportsworldcentral.com"
+
 class SWC_Config:
     swc_base_url: str
     swc_timeout: int
     swc_backoff: bool
     swc_backoff_max_time: int
 
-    def __init__(self, url: str = "https://api.sportsworldcentral.com", timeout: float = 5.0, backoff: bool = True, backoff_max_time: int = 30):
+    def __init__(self, url: str = default_url, timeout: float = 5.0, backoff: bool = True, backoff_max_time: int = 30):
         self.swc_base_url = url
         self.swc_timeout = timeout
         self.swc_backoff = backoff

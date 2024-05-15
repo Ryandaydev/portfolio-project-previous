@@ -97,8 +97,8 @@ class SWC_Client:
         #initial logging message
         self.logger.debug("Entered get league by ID - with backoff")        
         #build URL
-        local_url = f"{self.GET_LEAGUES_ENDPOINT}{league_id}"
-        response = self.get_url(local_url)
+        endpoint_url = f"{self.GET_LEAGUES_ENDPOINT}{league_id}"
+        response = self.get_url(endpoint_url)
 
         #check if it's a 200
         if response.status_code == 200:
