@@ -4,6 +4,7 @@ import pyswc.swc_config as config
 import logging
 from .schemas.sdk_schemas import League, LeagueWrapper, LeaguesWrapper
 from .errors.swc_error import SWCError
+import backoff
 
 class SWC_Client:
     HEALTH_CHECK_ENDPOINT = "/"
@@ -20,6 +21,19 @@ class SWC_Client:
         self.swc_base_url = input_config.swc_base_url
         self.logger = logging.getLogger(__name__)
         self.timeout = input_config.swc_timeout
+        self.backoff =  input_config.swc_backoff
+        self.backoff_max_time = input_config.swc_backoff_max_time
+
+        if self.backoff:
+            self.get_url = self._apply_backoff(self.get_url)
+
+    #logging.getLogger('backoff').addHandler(logging.StreamHandler())
+
+    def _apply_backoff(self, func):
+        return backoff.on_exception(backoff.expo, httpx.RequestError, max_time=self.backoff_max_time, jitter=backoff.random_jitter)(func)
+
+
+
 
     def health_check(self):
         #initial logging message
@@ -41,12 +55,47 @@ class SWC_Client:
         wrappedResponse = LeaguesWrapper(http_response_code = response.status_code, response_leagues = responseLeagues)
         return wrappedResponse
 
-    def get_league_by_id(self, league_id: int):
+    # def get_league_by_id(self, league_id: int):
+    #     #initial logging message
+    #     self.logger.debug("Entered get league by ID")        
+    #     #call the API to real league
+    #     with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
+    #         response = client.get(f"{self.GET_LEAGUES_ENDPOINT}{league_id}")
+    #     #check if it's a 200
+    #     if response.status_code == 200:
+    #         self.logger.debug(response.json())
+    #         wrappedResponse = LeagueWrapper(http_response_code = response.status_code, response_league = League(** response.json()))
+    #     elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+    #         self.logger.exception(f"API error occurred: {response.text}")
+    #         raise SWCError('API error occurred', response.status_code, response.text, response)
+    #     else:
+    #         raise SWCError('unknown status code received', response.status_code, response.text, response)
+    #     return wrappedResponse
+    
+    #Transient errors (HTTP status codes 400, 408, 500, 502, 503, and 504) 
+    #and throttling errors (HTTP status codes 400, 403, 429, 502, 503, and 509) 
+    #can all potentially be retried. SDK retry behavior is determined in combination with error codes or other data from the service.
+
+
+    def fatal_code(e):
+        return e.response.status_code in ('400','408','500','502','503','504','403','429','509')
+
+    # @backoff.on_exception(backoff.expo,
+    #                   httpx.RequestError,
+    #                   max_time=30,
+    #                   jitter=backoff.random_jitter)
+    def get_url(self, url):
+            with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
+                    #return client.get(url).raise_for_status()
+                    return client.get(url)
+
+    def get_league_by_id_with_backoff(self, league_id: int):
         #initial logging message
-        self.logger.debug("Entered get league by ID")        
-        #call the API to real league
-        with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
-            response = client.get(f"{self.GET_LEAGUES_ENDPOINT}{league_id}")
+        self.logger.debug("Entered get league by ID - with backoff")        
+        #build URL
+        local_url = f"{self.GET_LEAGUES_ENDPOINT}{league_id}"
+        response = self.get_url(local_url)
+
         #check if it's a 200
         if response.status_code == 200:
             self.logger.debug(response.json())
