@@ -28,13 +28,13 @@ class SWC_Client:
 
         self.logger.debug("Input config: " + str(input_config))
 
+        #if the client was called with backoff, decorate the get_url with backoff logic
         if self.backoff:
             self.get_url = self._apply_backoff(self.get_url)
 
-    #logging.getLogger('backoff').addHandler(logging.StreamHandler())
-
+    #the backoff logic to decorate the function with
     def _apply_backoff(self, func):
-        return backoff.on_exception(backoff.expo, httpx.RequestError, max_time=self.backoff_max_time, jitter=backoff.random_jitter)(func)
+        return backoff.on_exception(backoff.expo, (httpx.RequestError, SWCError), max_time=self.backoff_max_time, jitter=backoff.random_jitter)(func)
 
 
 
@@ -84,14 +84,17 @@ class SWC_Client:
     def fatal_code(e):
         return e.response.status_code in ('400','408','500','502','503','504','403','429','509')
 
-    # @backoff.on_exception(backoff.expo,
-    #                   httpx.RequestError,
-    #                   max_time=30,
-    #                   jitter=backoff.random_jitter)
+
     def get_url(self, url):
-            with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
-                    #return client.get(url).raise_for_status()
-                    return client.get(url)
+            try:
+                with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
+                        return client.get(url)
+            except httpx.HTTPStatusError as e:
+                self.logger.error(f"HTTP status error occurred: {e.response.status_code} {e.response.text}")
+                return e.response
+            except httpx.RequestError as e:
+                self.logger.error(f"Request error occurred: {str(e)}")
+                raise SWCError(f"Request error: {str(e)}") from e
 
     def get_league_by_id_with_backoff(self, league_id: int):
         #initial logging message

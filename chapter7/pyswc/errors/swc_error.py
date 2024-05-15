@@ -8,6 +8,7 @@ class SWCError(Exception):
     raw_response: httpx.Response
 
     def __init__(self, message: str, status_code: int = None, body: str = None, raw_response: httpx.Response = None):
+        super().__init__(message)
         self.message = message
         self.status_code = status_code
         self.body = body
@@ -15,7 +16,7 @@ class SWCError(Exception):
 
     def __str__(self):
         body = ''
-        if len(self.body) > 0:
+        if self.body and len(self.body) > 0:
             body = f'\n{self.body}'
 
         return f'{self.message}: Status {self.status_code}{body}'

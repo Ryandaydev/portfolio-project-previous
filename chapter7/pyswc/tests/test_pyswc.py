@@ -9,8 +9,10 @@ from ..errors.swc_error import SWCError
 #config = SWC_Config("https://swc-api-container.86jt1rvv5bo8k.us-west-2.cs.amazonlightsail.com")
 #config = SWC_Config(timeout=10.0)
 #config = SWC_Config("https://api.sportsworldcentral-false.com", backoff=False)
-#config = SWC_Config("https://api.sportsworldcentral-false.com")
-config = SWC_Config()
+config = SWC_Config("https://api.sportsworldcentral-false.com")
+#config = SWC_Config()
+
+#[TODO: use monkeypatch to test more error conditions]
 
 client = SWC_Client(config)
 
