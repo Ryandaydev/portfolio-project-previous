@@ -18,11 +18,15 @@ class SWC_Client:
 
     def __init__(self, input_config: config.SWC_Config = None):
         #create a config
-        self.swc_base_url = input_config.swc_base_url
         self.logger = logging.getLogger(__name__)
+
+        #initial with config values
+        self.swc_base_url = input_config.swc_base_url
         self.timeout = input_config.swc_timeout
         self.backoff =  input_config.swc_backoff
         self.backoff_max_time = input_config.swc_backoff_max_time
+
+        self.logger.debug("Input config: " + str(input_config))
 
         if self.backoff:
             self.get_url = self._apply_backoff(self.get_url)
