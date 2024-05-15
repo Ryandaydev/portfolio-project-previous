@@ -63,13 +63,13 @@ class SWC_Client:
         if response.status_code == 200:
             self.logger.debug(response.json())        
             responseLeagues = [League(**league) for league in response.json()]
-            wrappedResponse = LeaguesWrapper(http_response_code = response.status_code, response_leagues = responseLeagues)
+            #wrappedResponse = LeaguesWrapper(http_response_code = response.status_code, response_leagues = responseLeagues)
         elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
             self.logger.exception(f"API error occurred: {response.text}")
             raise SWCError('API error occurred', response.status_code, response.text, response)
         else:
             raise SWCError('unknown status code received', response.status_code, response.text, response)
-        return wrappedResponse
+        return responseLeagues
 
     def build_url(self, endpoint, params=None):
         if params:
@@ -126,10 +126,11 @@ class SWC_Client:
         #check if it's a 200
         if response.status_code == 200:
             self.logger.debug(response.json())
-            wrappedResponse = LeagueWrapper(http_response_code = response.status_code, response_league = League(** response.json()))
+            #wrappedResponse = LeagueWrapper(http_response_code = response.status_code, response_league = League(** response.json()))
+            responseLeague = League(** response.json())
         elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
             self.logger.exception(f"API error occurred: {response.text}")
             raise SWCError('API error occurred', response.status_code, response.text, response)
         else:
             raise SWCError('unknown status code received', response.status_code, response.text, response)
-        return wrappedResponse
+        return responseLeague

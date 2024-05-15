@@ -12,9 +12,9 @@ class Performance(BaseModel):
     fantasy_points : float
     last_changed_date : date
         
-class PerformancesWrapper(BaseModel):
-    http_response_code : int
-    response_league: list[Performance]
+# class PerformancesWrapper(BaseModel):
+#     http_response_code : int
+#     response_league: list[Performance]
 
 class PlayerBase(BaseModel):
     #model_config = ConfigDict(from_attributes = True)    
@@ -29,13 +29,13 @@ class Player(PlayerBase):
     #model_config = ConfigDict(from_attributes = True)
     performances: List[Performance] = []
 
-class PlayerWrapper(BaseModel):
-    http_response_code : int
-    response_league: Player
+# class PlayerWrapper(BaseModel):
+#     http_response_code : int
+#     response_league: Player
 
-class PlayersWrapper(BaseModel):
-    http_response_code : int
-    response_league: list[Player]
+# class PlayersWrapper(BaseModel):
+#     http_response_code : int
+#     response_league: list[Player]
 
 class TeamBase(BaseModel):
     #model_config = ConfigDict(from_attributes = True)
@@ -48,13 +48,13 @@ class Team(TeamBase):
     #model_config = ConfigDict(from_attributes = True)
     players: List[PlayerBase] = []
 
-class TeamWrapper(BaseModel):
-    http_response_code : int
-    response_league: Team
+# class TeamWrapper(BaseModel):
+#     http_response_code : int
+#     response_league: Team
 
-class TeamsWrapper(BaseModel):
-    http_response_code : int
-    response_leagues: list[Team]
+# class TeamsWrapper(BaseModel):
+#     http_response_code : int
+#     response_leagues: list[Team]
 
 class League(BaseModel):
     #model_config = ConfigDict(from_attributes = True)
@@ -64,20 +64,20 @@ class League(BaseModel):
     last_changed_date : date
     teams: List[TeamBase] = []
 
-class LeagueWrapper(BaseModel):
-    http_response_code : int
-    response_league: League
+# class LeagueWrapper(BaseModel):
+#     http_response_code : int
+#     response_league: League
     
-class LeaguesWrapper(BaseModel):
-    http_response_code : int
-    response_leagues: list[League]
+# class LeaguesWrapper(BaseModel):
+#     http_response_code : int
+#     response_leagues: list[League]
 
 class Counts(BaseModel):
     league_count : int
     team_count : int
     player_count : int
 
-class CountsWrapper(BaseModel):
-    http_response_code : int
-    response_counts: Counts
+# class CountsWrapper(BaseModel):
+#     http_response_code : int
+#     response_counts: Counts
 
