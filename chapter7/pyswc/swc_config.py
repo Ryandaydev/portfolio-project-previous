@@ -2,7 +2,7 @@
 import logging
 
 class SWC_Config:
-    swc_base_url = "https://api.sportsworldcentral-false.com"
+    swc_base_url = "https://api.sportsworldcentral.com"
     swc_timeout = 5.0
     swc_backoff = True
     swc_backoff_max_time=30
