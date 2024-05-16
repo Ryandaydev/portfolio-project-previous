@@ -71,8 +71,6 @@ class SWC_Client:
 
 #Below here are individual endpoints
 
-
-
     #analytics endpoints
     def health_check(self):
         #initial logging message
@@ -117,7 +115,7 @@ class SWC_Client:
     #standard format
     def get_league_by_id(self, league_id: int):
         #initial logging message
-        self.logger.debug("Entered get league by ID - with backoff")        
+        self.logger.debug("Entered get league by ID")        
         #build URL
         endpoint_url = f"{self.GET_LEAGUES_ENDPOINT}{league_id}"
         #make the API call
