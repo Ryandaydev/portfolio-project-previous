@@ -158,7 +158,7 @@ def test_get_performances_by_date():
 
 #bulk endpoints
 def test_bulk_players():
-    """Tests bulkd player download through SDK"""
+    """Tests bulk player download through SDK"""
     try: 
         player_file = client.get_bulk_players()
     except SWCError as e:
@@ -167,9 +167,15 @@ def test_bulk_players():
     # Decode the byte content to a string
     player_file_str = player_file.decode('utf-8-sig') 
 
-    # Use StringIO to read the CSV content
-    player_file = StringIO(player_file_str)
-    csv_reader = csv.reader(player_file)
+    # Use StringIO to get data from file
+    player_file_s = StringIO(player_file_str)
+
+    # Write the file to disk
+    output_file_path = 'tests/test_data/players_file.csv'
+    with open(output_file_path, 'wb') as f:
+        f.write(player_file)
+
+    csv_reader = csv.reader(player_file_s)
 
     # Assert the file has the correct number of records (including header)
     rows = list(csv_reader)
@@ -177,3 +183,114 @@ def test_bulk_players():
 
     # Additional check: ensure the first row is the header
     assert rows[0] == ['player_id','gsis_id','first_name','last_name','position','last_changed_date']
+
+
+def test_bulk_leagues():
+    """Tests bulk league download through SDK"""
+    try: 
+        league_file = client.get_bulk_leagues()
+    except SWCError as e:
+        raise(e)    
+
+    # Decode the byte content to a string
+    league_file_str = league_file.decode('utf-8-sig') 
+
+    # Use StringIO to get data from file
+    league_file_s = StringIO(league_file_str)
+
+    # Write the file to disk
+    output_file_path = 'tests/test_data/leagues_file.csv'
+    with open(output_file_path, 'wb') as f:
+        f.write(league_file)
+
+    csv_reader = csv.reader(league_file_s)
+
+    # Assert the file has the correct number of records (including header)
+    rows = list(csv_reader)
+    assert len(rows) == 6
+
+    # Additional check: ensure the first row is the header
+    assert rows[0] == ['league_id','league_name','scoring_type','last_change_date']
+
+def test_bulk_performances():
+    """Tests bulk performance download through SDK"""
+    try: 
+        performance_file = client.get_bulk_performances()
+    except SWCError as e:
+        raise(e)    
+
+    # Decode the byte content to a string
+    performance_file_str = performance_file.decode('utf-8-sig') 
+
+    # Use StringIO to get data from file
+    performance_file_s = StringIO(performance_file_str)
+
+    # Write the file to disk
+    output_file_path = 'tests/test_data/performances_file.csv'
+    with open(output_file_path, 'wb') as f:
+        f.write(performance_file)
+
+    csv_reader = csv.reader(performance_file_s)
+
+    # Assert the file has the correct number of records (including header)
+    rows = list(csv_reader)
+    assert len(rows) == 1101
+
+    # Additional check: ensure the first row is the header
+    assert rows[0] == ['performance_id','week_number','fantasy_points','player_id','last_change_date']
+
+def test_bulk_teams():
+    """Tests bulk team download through SDK"""
+    try: 
+        team_file = client.get_bulk_teams()
+    except SWCError as e:
+        raise(e)    
+
+    # Decode the byte content to a string
+    team_file_str = team_file.decode('utf-8-sig') 
+
+    # Use StringIO to get data from file
+    team_file_s = StringIO(team_file_str)
+
+    # Write the file to disk
+    output_file_path = 'tests/test_data/teams_file.csv'
+    with open(output_file_path, 'wb') as f:
+        f.write(team_file)
+
+    csv_reader = csv.reader(team_file_s)
+
+    # Assert the file has the correct number of records (including header)
+    rows = list(csv_reader)
+    assert len(rows) == 21
+
+    # Additional check: ensure the first row is the header
+    assert rows[0] == ['team_id','team_name','league_id','last_change_date']
+
+def test_bulk_team_players():
+    """Tests bulk team_player download through SDK"""
+    try: 
+        team_player_file = client.get_bulk_team_players()
+    except SWCError as e:
+        raise(e)    
+    
+    # Write the file to disk
+    output_file_path = 'tests/test_data/team_player_file.csv'
+    with open(output_file_path, 'wb') as f:
+        f.write(team_player_file)
+
+    # Decode the byte content to a string
+    team_player_file_str = team_player_file.decode('utf-8-sig') 
+
+    # Use StringIO to get data from file
+    team_player_file_s = StringIO(team_player_file_str)
+
+
+
+    csv_reader = csv.reader(team_player_file_s)
+
+    # Assert the file has the correct number of records (including header)
+    rows = list(csv_reader)
+    assert len(rows) == 141
+
+    # Additional check: ensure the first row is the header
+    assert rows[0] == ['team_id','player_id','last_change_date']

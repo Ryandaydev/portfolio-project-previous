@@ -305,6 +305,68 @@ class SWC_Client:
             raise SWCError('API error occurred', response.status_code, response.text, response)
         else:
             raise SWCError('unknown status code received', response.status_code, response.text, response)
-        return response
+
+    def get_bulk_leagues(self):
+        #initial logging message
+        self.logger.debug("Entered get bulk leagues")
+        response = httpx.get(self.BULK_FILE_PATHS["leagues"])
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug("File downloaded successfully")
+            return response.content 
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
     
+
+    def get_bulk_performances(self):
+        #initial logging message
+        self.logger.debug("Entered get bulk performances")
+        response = httpx.get(self.BULK_FILE_PATHS["performances"])
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug("File downloaded successfully")
+            return response.content 
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+    
+    def get_bulk_teams(self):
+        #initial logging message
+        self.logger.debug("Entered get bulk teams")
+        response = httpx.get(self.BULK_FILE_PATHS["teams"])
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug("File downloaded successfully")
+            return response.content 
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+    
+    def get_bulk_team_players(self):
+        #initial logging message
+        self.logger.debug("Entered get bulk team_players")
+        response = httpx.get(self.BULK_FILE_PATHS["team_players"])
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug("File downloaded successfully")
+            return response.content 
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+    
+
+
 
