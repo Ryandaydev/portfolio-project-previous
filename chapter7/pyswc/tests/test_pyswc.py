@@ -4,6 +4,9 @@ from pyswc import SWC_Client
 from pyswc import SWC_Config
 from ..schemas import League, Player, Performance, Team, Counts
 from ..errors import SWCError
+from io import StringIO
+import csv
+
 
 
 #config = SWC_Config("https://swc-api-container.86jt1rvv5bo8k.us-west-2.cs.amazonlightsail.com")
@@ -153,3 +156,24 @@ def test_get_performances_by_date():
         assert isinstance(performance, Performance)
     assert len(performances_response) == 550
 
+#bulk endpoints
+def test_bulk_players():
+    """Tests bulkd player download through SDK"""
+    try: 
+        player_file = client.get_bulk_players()
+    except SWCError as e:
+        raise(e)    
+
+    # Decode the byte content to a string
+    player_file_str = player_file.decode('utf-8-sig') 
+
+    # Use StringIO to read the CSV content
+    player_file = StringIO(player_file_str)
+    csv_reader = csv.reader(player_file)
+
+    # Assert the file has the correct number of records (including header)
+    rows = list(csv_reader)
+    assert len(rows) == 551
+
+    # Additional check: ensure the first row is the header
+    assert rows[0] == ['player_id','gsis_id','first_name','last_name','position','last_changed_date']

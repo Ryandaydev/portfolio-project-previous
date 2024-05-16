@@ -18,6 +18,15 @@ class SWC_Client:
     GET_TEAMS_ENDPOINT = "/v0/teams/"
     GET_COUNTS_ENDPOINT = "/v0/counts/"
 
+    BULK_FILE_PATHS = {
+        "players": "https://raw.githubusercontent.com/Ryandaydev/portfolio-project/main/chapter3/data/player_data.csv",
+        "leagues": "https://raw.githubusercontent.com/Ryandaydev/portfolio-project/main/chapter3/data/league_data.csv",
+        "performances": "https://raw.githubusercontent.com/Ryandaydev/portfolio-project/main/chapter3/data/performance_data.csv",
+        "teams": "https://raw.githubusercontent.com/Ryandaydev/portfolio-project/main/chapter3/data/team_data.csv",
+        "team_players": "https://raw.githubusercontent.com/Ryandaydev/portfolio-project/main/chapter3/data/team_player_data.csv"
+    }
+
+
     def __init__(self, input_config: config.SWC_Config = None):
         #create a config
         self.logger = logging.getLogger(__name__)
@@ -280,3 +289,22 @@ class SWC_Client:
         else:
             raise SWCError('unknown status code received', response.status_code, response.text, response)
         return responsePerformances       
+    
+#bulk endpoints
+    def get_bulk_players(self):
+        #initial logging message
+        self.logger.debug("Entered get bulk players")
+        response = httpx.get(self.BULK_FILE_PATHS["players"])
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug("File downloaded successfully")
+            return response.content 
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+        return response
+    
+
