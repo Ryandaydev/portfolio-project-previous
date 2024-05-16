@@ -164,16 +164,14 @@ def test_bulk_players():
     except SWCError as e:
         raise(e)    
 
-    # Decode the byte content to a string
-    player_file_str = player_file.decode('utf-8-sig') 
-
-    # Use StringIO to get data from file
-    player_file_s = StringIO(player_file_str)
-
-    # Write the file to disk
-    output_file_path = 'tests/test_data/players_file.csv'
+    # Write the file to disk to verify file download
+    output_file_path = 'tests/test_data_output/players_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(player_file)
+
+    # Decode the byte content to a string to test contents
+    player_file_str = player_file.decode('utf-8-sig') 
+    player_file_s = StringIO(player_file_str)
 
     csv_reader = csv.reader(player_file_s)
 
@@ -192,16 +190,14 @@ def test_bulk_leagues():
     except SWCError as e:
         raise(e)    
 
-    # Decode the byte content to a string
-    league_file_str = league_file.decode('utf-8-sig') 
-
-    # Use StringIO to get data from file
-    league_file_s = StringIO(league_file_str)
-
-    # Write the file to disk
-    output_file_path = 'tests/test_data/leagues_file.csv'
+    # Write the file to disk to verify file download
+    output_file_path = 'tests/test_data_output/leagues_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(league_file)
+
+    # Decode the byte content to a string to test contents
+    league_file_str = league_file.decode('utf-8-sig') 
+    league_file_s = StringIO(league_file_str)
 
     csv_reader = csv.reader(league_file_s)
 
@@ -219,16 +215,14 @@ def test_bulk_performances():
     except SWCError as e:
         raise(e)    
 
-    # Decode the byte content to a string
-    performance_file_str = performance_file.decode('utf-8-sig') 
-
-    # Use StringIO to get data from file
-    performance_file_s = StringIO(performance_file_str)
-
-    # Write the file to disk
-    output_file_path = 'tests/test_data/performances_file.csv'
+    # Write the file to disk to verify file download
+    output_file_path = 'tests/test_data_output/performances_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(performance_file)
+
+    # Decode the byte content to a string to test contents
+    performance_file_str = performance_file.decode('utf-8-sig') 
+    performance_file_s = StringIO(performance_file_str)
 
     csv_reader = csv.reader(performance_file_s)
 
@@ -246,16 +240,15 @@ def test_bulk_teams():
     except SWCError as e:
         raise(e)    
 
-    # Decode the byte content to a string
-    team_file_str = team_file.decode('utf-8-sig') 
 
-    # Use StringIO to get data from file
-    team_file_s = StringIO(team_file_str)
-
-    # Write the file to disk
-    output_file_path = 'tests/test_data/teams_file.csv'
+    # Write the file to disk to verify file download
+    output_file_path = 'tests/test_data_output/teams_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(team_file)
+
+    # Decode the byte content to a string to test contents
+    team_file_str = team_file.decode('utf-8-sig') 
+    team_file_s = StringIO(team_file_str)
 
     csv_reader = csv.reader(team_file_s)
 
@@ -273,18 +266,14 @@ def test_bulk_team_players():
     except SWCError as e:
         raise(e)    
     
-    # Write the file to disk
-    output_file_path = 'tests/test_data/team_player_file.csv'
+    # Write the file to disk to verify file download
+    output_file_path = 'tests/test_data_output/team_player_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(team_player_file)
 
-    # Decode the byte content to a string
+    # Decode the byte content to a string to test contents
     team_player_file_str = team_player_file.decode('utf-8-sig') 
-
-    # Use StringIO to get data from file
     team_player_file_s = StringIO(team_player_file_str)
-
-
 
     csv_reader = csv.reader(team_player_file_s)
 
