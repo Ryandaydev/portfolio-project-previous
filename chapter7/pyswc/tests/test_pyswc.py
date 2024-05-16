@@ -2,8 +2,8 @@
 import pytest
 from pyswc import SWC_Client
 from pyswc import SWC_Config
-from ..schemas.sdk_schemas import League, League
-from ..errors.swc_error import SWCError
+from ..schemas import League
+from ..errors import SWCError
 
 
 #config = SWC_Config("https://swc-api-container.86jt1rvv5bo8k.us-west-2.cs.amazonlightsail.com")

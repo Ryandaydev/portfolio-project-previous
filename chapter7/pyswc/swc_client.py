@@ -2,8 +2,8 @@
 import httpx
 import pyswc.swc_config as config
 import logging
-from .schemas.sdk_schemas import League, LeagueWrapper, LeaguesWrapper
-from .errors.swc_error import SWCError
+from .schemas import League
+from .errors import SWCError
 import backoff
 from urllib.parse import urlencode, urljoin
 from datetime import date
