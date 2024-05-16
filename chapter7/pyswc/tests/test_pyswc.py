@@ -2,7 +2,7 @@
 import pytest
 from pyswc import SWC_Client
 from pyswc import SWC_Config
-from ..schemas import League
+from ..schemas import League, Player, Performance, Team, Counts
 from ..errors import SWCError
 
 
@@ -15,13 +15,23 @@ config = SWC_Config()
 
 client = SWC_Client(config)
 
+#analytics endpoints
 def test_health_check():
     """Tests health check from SDK"""
     response = client.health_check()
     assert response.status_code == 200
     assert response.json() == {"message": "API health check successful"}
 
+def test_get_counts():
+    """Tests get counts from SDK"""
+    counts_response = client.get_counts()
+    assert isinstance(counts_response, Counts)
+    assert counts_response.league_count == 5
+    assert counts_response.team_count == 20
+    assert counts_response.player_count == 550
 
+
+#membership endpoints
 def test_get_leagues():
     """Tests get leagues from SDK"""
     try: 
@@ -59,3 +69,87 @@ def test_get_league_by_id():
     
     assert isinstance(league_response, League)
     assert len(league_response.teams) == 8        
+
+def test_get_teams():
+    """Tests get teams from SDK"""
+    try: 
+        teams_response = client.get_teams()
+    except SWCError as e:
+        raise(e)    
+    # Assert the list is not empty
+    assert isinstance(teams_response, list)
+    # Assert each item in the list is an instance of League
+    for team in teams_response:
+        assert isinstance(team, Team)
+    assert len(teams_response) == 20
+
+
+
+#players
+def test_get_players():
+    """Tests get players from SDK"""
+    try: 
+        players_response = client.get_players(skip=0,limit=600)
+    except SWCError as e:
+        raise(e)    
+    # Assert the list is not empty
+    assert isinstance(players_response, list)
+    # Assert each item in the list is an instance of League
+    for player in players_response:
+        assert isinstance(player, Player)
+    assert len(players_response) == 550
+
+
+def test_get_players_by_name():
+    """Tests that the count of players in the database is what is expected"""
+    try: 
+        players_response = client.get_players(first_name="Bryce", last_name="Young")
+    except SWCError as e:
+        raise(e)    
+    # Assert the list is not empty
+    assert isinstance(players_response, list)
+    # Assert each item in the list is an instance of League
+    for player in players_response:
+        assert isinstance(player, Player)
+    assert len(players_response) == 1
+    assert players_response[0].player_id == 102
+
+
+def test_get_player_by_id():
+    """Tests get player by ID from SDK"""
+    try: 
+        player_response = client.get_player_by_id(102)
+    except SWCError as e:
+        raise(e)
+    assert isinstance(player_response, Player)
+    assert player_response.first_name == "Bryce"       
+
+#scoring endpoints
+def test_get_performances():
+    """Tests get peformances from SDK"""
+    try: 
+        performances_response = client.get_performances(skip=0,limit=2000)
+    except SWCError as e:
+        raise(e)    
+    # Assert the list is not empty
+    assert isinstance(performances_response, list)
+    # Assert each item in the list is an instance of League
+    for performance in performances_response:
+        assert isinstance(performance, Performance)
+    assert len(performances_response) == 1100
+
+
+#test /v0/performances/ with changed date
+def test_get_performances_by_date():
+    """Tests get peformances from SDK"""
+    try: 
+        performances_response = client.get_performances(skip=0,limit=2000,minimum_last_changed_date="2024-04-01")
+    except SWCError as e:
+        raise(e)    
+    # Assert the list is not empty
+    assert isinstance(performances_response, list)
+    # Assert each item in the list is an instance of League
+    for performance in performances_response:
+        assert isinstance(performance, Performance)
+    assert len(performances_response) == 550
+

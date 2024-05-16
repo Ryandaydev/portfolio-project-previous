@@ -2,11 +2,11 @@
 import httpx
 import pyswc.swc_config as config
 import logging
-from .schemas import League
+from .schemas import League, Player, Performance, Team, Counts
 from .errors import SWCError
 import backoff
-from urllib.parse import urlencode, urljoin
-from datetime import date
+from urllib.parse import urlencode
+
 
 class SWC_Client:
     HEALTH_CHECK_ENDPOINT = "/"
@@ -38,6 +38,94 @@ class SWC_Client:
     def _apply_backoff(self, func):
         return backoff.on_exception(backoff.expo, (httpx.RequestError, SWCError), max_time=self.backoff_max_time, jitter=backoff.random_jitter)(func)
 
+
+    def build_url(self, endpoint, params=None):
+        if params:
+            query_string = urlencode(params)
+            full_url = endpoint + "?" + query_string
+        else:
+            full_url = endpoint
+        return full_url
+
+
+    def get_url(self, url):
+            try:
+                with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
+                        return client.get(url)
+            except httpx.HTTPStatusError as e:
+                self.logger.error(f"HTTP status error occurred: {e.response.status_code} {e.response.text}")
+                return e.response
+            except httpx.RequestError as e:
+                self.logger.error(f"Request error occurred: {str(e)}")
+                raise SWCError(f"Request error: {str(e)}") from e
+
+
+#Below here are individual endpoints
+
+
+
+    #analytics endpoints
+    def health_check(self):
+        #initial logging message
+        self.logger.debug("Entered health check")
+        #build URL
+        endpoint_url = self.HEALTH_CHECK_ENDPOINT
+        #make the API call
+        response = self.get_url(endpoint_url)
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug(response.json())
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+        return response
+    
+    def get_counts(self):
+        #initial logging message
+        self.logger.debug("Entered get counts")
+        #build URL
+        endpoint_url = self.GET_COUNTS_ENDPOINT
+        #make the API call
+        response = self.get_url(endpoint_url)
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug(response.json())
+            responseCounts = Counts(** response.json())
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+        return responseCounts
+
+
+    #membership endpoints
+
+    #standard format
+    def get_league_by_id(self, league_id: int):
+        #initial logging message
+        self.logger.debug("Entered get league by ID - with backoff")        
+        #build URL
+        endpoint_url = f"{self.GET_LEAGUES_ENDPOINT}{league_id}"
+        #make the API call
+        response = self.get_url(endpoint_url)
+
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug(response.json())
+            responseLeague = League(** response.json())
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+        return responseLeague
+    
     def get_leagues(self, 
                      skip: int = 0, 
                      limit: int = 100, 
@@ -69,56 +157,84 @@ class SWC_Client:
             raise SWCError('API error occurred', response.status_code, response.text, response)
         else:
             raise SWCError('unknown status code received', response.status_code, response.text, response)
-        return responseLeagues
+        return responseLeagues    
 
-    def build_url(self, endpoint, params=None):
-        if params:
-            query_string = urlencode(params)
-            full_url = endpoint + "?" + query_string
-        else:
-            full_url = endpoint
-        return full_url
-
-
-    def get_url(self, url):
-            try:
-                with httpx.Client(base_url=self.swc_base_url, timeout=self.timeout) as client:
-                        return client.get(url)
-            except httpx.HTTPStatusError as e:
-                self.logger.error(f"HTTP status error occurred: {e.response.status_code} {e.response.text}")
-                return e.response
-            except httpx.RequestError as e:
-                self.logger.error(f"Request error occurred: {str(e)}")
-                raise SWCError(f"Request error: {str(e)}") from e
-
-    #analytics endpoints
-    def health_check(self):
+    def get_teams(self, 
+                     skip: int = 0, 
+                     limit: int = 100, 
+                     minimum_last_changed_date: str = None, 
+                     team_name: str = None,
+                     league_id: int = None):
         #initial logging message
-        self.logger.debug("Entered health check")
-        #build URL
-        endpoint_url = self.HEALTH_CHECK_ENDPOINT
+        self.logger.debug("Entered get teams")        
+
+        params = { 'skip':skip, 
+                        'limit':limit, 
+                        'minimum_last_changed_date':minimum_last_changed_date,
+                        'team_name' : team_name,
+                        'league_id' : league_id}
+        
+        # Remove None values from params
+        params = {key: value for key, value in params.items() if value is not None} 
+
+        endpoint_url = self.build_url(self.GET_TEAMS_ENDPOINT, params)
+
         #make the API call
         response = self.get_url(endpoint_url)
         #review status of API call
         #check if it's a 200
         if response.status_code == 200:
-            self.logger.debug(response.json())
+            self.logger.debug(response.json())        
+            responseTeams = [Team(**team) for team in response.json()]
         elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
             self.logger.exception(f"API error occurred: {response.text}")
             raise SWCError('API error occurred', response.status_code, response.text, response)
         else:
             raise SWCError('unknown status code received', response.status_code, response.text, response)
-        return response
+        return responseTeams    
 
 
-    #membership endpoints
-
-    #standard format
-    def get_league_by_id(self, league_id: int):
+#players endpoints    
+    def get_players(self, 
+                     skip: int = 0, 
+                     limit: int = 100, 
+                     minimum_last_changed_date: str = None, 
+                     first_name: str = None,
+                     last_name: str = None,):
         #initial logging message
-        self.logger.debug("Entered get league by ID - with backoff")        
+        self.logger.debug("Entered get players")        
+
+        params = { 'skip':skip, 
+                        'limit':limit, 
+                        'minimum_last_changed_date':minimum_last_changed_date,
+                        'first_name' : first_name,
+                        'last_name' : last_name}
+        
+        # Remove None values from params
+        params = {key: value for key, value in params.items() if value is not None} 
+
+        endpoint_url = self.build_url(self.GET_PLAYERS_ENDPOINT, params)
+
+        #make the API call
+        response = self.get_url(endpoint_url)
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug(response.json())        
+            responsePlayers = [Player(**player) for player in response.json()]
+            #wrappedResponse = LeaguesWrapper(http_response_code = response.status_code, response_leagues = responseLeagues)
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+        return responsePlayers       
+    
+    def get_player_by_id(self, player_id: int):
+        #initial logging message
+        self.logger.debug("Entered get player by ID")        
         #build URL
-        endpoint_url = f"{self.GET_LEAGUES_ENDPOINT}{league_id}"
+        endpoint_url = f"{self.GET_PLAYERS_ENDPOINT}{player_id}"
         #make the API call
         response = self.get_url(endpoint_url)
 
@@ -126,11 +242,41 @@ class SWC_Client:
         #check if it's a 200
         if response.status_code == 200:
             self.logger.debug(response.json())
-            #wrappedResponse = LeagueWrapper(http_response_code = response.status_code, response_league = League(** response.json()))
-            responseLeague = League(** response.json())
+            responsePlayer = Player(** response.json())
         elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
             self.logger.exception(f"API error occurred: {response.text}")
             raise SWCError('API error occurred', response.status_code, response.text, response)
         else:
             raise SWCError('unknown status code received', response.status_code, response.text, response)
-        return responseLeague
+        return responsePlayer
+
+#scoring endpoints
+    def get_performances(self, 
+                     skip: int = 0, 
+                     limit: int = 100, 
+                     minimum_last_changed_date: str = None ):
+        #initial logging message
+        self.logger.debug("Entered get performances")        
+
+        params = { 'skip':skip, 
+                        'limit':limit, 
+                        'minimum_last_changed_date':minimum_last_changed_date}
+        
+        # Remove None values from params
+        params = {key: value for key, value in params.items() if value is not None} 
+
+        endpoint_url = self.build_url(self.GET_PERFORMANCES_ENDPOINT, params)
+
+        #make the API call
+        response = self.get_url(endpoint_url)
+        #review status of API call
+        #check if it's a 200
+        if response.status_code == 200:
+            self.logger.debug(response.json())        
+            responsePerformances = [Performance(**performance) for performance in response.json()]
+        elif response.status_code >= 400 and response.status_code < 500 or response.status_code >= 500 and response.status_code < 600:
+            self.logger.exception(f"API error occurred: {response.text}")
+            raise SWCError('API error occurred', response.status_code, response.text, response)
+        else:
+            raise SWCError('unknown status code received', response.status_code, response.text, response)
+        return responsePerformances       
