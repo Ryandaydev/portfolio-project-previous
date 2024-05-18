@@ -11,10 +11,10 @@ setup(
     ],
     include_package_data=True,
     description='A python SDK for the fake SportsWorldCentral website',
-    long_description=open('README.md').read(),
+    long_description=open('readme.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/Ryandaydev/portfolio-project',
     author='Ryan Day',
     author_email='ryandaydev@gmail.com',
-    license='MIT',
+    license='MIT'
 )
