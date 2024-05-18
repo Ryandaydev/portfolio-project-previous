@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='pyswc',
     version='0.1.0',
-    packages=find_packages(),
+    packages=find_packages(include=['pyswc', 'pyswc.*']),
     install_requires=[
         'pytest>=8.1',
         'backoff>=2.2.1',
