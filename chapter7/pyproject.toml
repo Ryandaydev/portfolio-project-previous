@@ -4,18 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyswc"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
-  { name="Ryan D", email="ryand@example.com" },
+  { name="Ryan D", email="ryan@hands-on-api-book.com" },
 ]
-description = "A small example package with setuptools"
+description = "Example Software Development Kit (SDK) from Hands-On API Book for AI and Data Science"
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
-    # How mature is this project? Common values are
-    #   3 - Alpha
-    #   4 - Beta
-    #   5 - Production/Stable
     "Development Status :: 3 - Alpha",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -29,5 +25,4 @@ dependencies = [
 
 
 [project.urls]
-Homepage = "https://github.com/Ryandaydev/test-pypi-packaging"
-Issues = "https://github.com/Ryandaydev/test-pypi-packaging/issues"
+Homepage = "https://github.com/Ryandaydev/portfolio-project"
