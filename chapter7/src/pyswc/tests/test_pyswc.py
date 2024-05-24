@@ -6,6 +6,7 @@ from ..schemas import League, Player, Performance, Team, Counts
 from ..errors import SWCError
 from io import StringIO
 import csv
+import os
 
 
 
@@ -17,6 +18,9 @@ config = SWC_Config()
 
 
 client = SWC_Client(config)
+
+current_dir = os.path.dirname(__file__)
+data_dir = current_dir + "/test_data_output/"
 
 #analytics endpoints
 def test_health_check():
@@ -165,7 +169,7 @@ def test_bulk_players():
         raise(e)    
 
     # Write the file to disk to verify file download
-    output_file_path = 'tests/test_data_output/players_file.csv'
+    output_file_path = data_dir + 'players_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(player_file)
 
@@ -191,7 +195,7 @@ def test_bulk_leagues():
         raise(e)    
 
     # Write the file to disk to verify file download
-    output_file_path = 'tests/test_data_output/leagues_file.csv'
+    output_file_path = data_dir + 'leagues_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(league_file)
 
@@ -216,7 +220,7 @@ def test_bulk_performances():
         raise(e)    
 
     # Write the file to disk to verify file download
-    output_file_path = 'tests/test_data_output/performances_file.csv'
+    output_file_path = data_dir + 'performances_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(performance_file)
 
@@ -242,7 +246,7 @@ def test_bulk_teams():
 
 
     # Write the file to disk to verify file download
-    output_file_path = 'tests/test_data_output/teams_file.csv'
+    output_file_path = data_dir + 'teams_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(team_file)
 
@@ -267,7 +271,7 @@ def test_bulk_team_players():
         raise(e)    
     
     # Write the file to disk to verify file download
-    output_file_path = 'tests/test_data_output/team_player_file.csv'
+    output_file_path = data_dir + 'team_player_file.csv'
     with open(output_file_path, 'wb') as f:
         f.write(team_player_file)
 
