@@ -1,11 +1,5 @@
-# example_package2_ryandaydev
-Testing the process of publishing to pypi
+# Pyswc software development kit (SDK)
+This is the python SDK to to interact with the SportsWorldCentral Football API, which was created for the book Hands-On APIs for AI and Data Science. 
 
-## Purpose
-This is a project I'm only testing to see how Python packaging works
+You can read more about this book at: https://hands-on-api-book.com
 
-## Decisions
-Here are some decisions I made:
-
-1. Using setuptools for the build
-2. Using unittest for testing
