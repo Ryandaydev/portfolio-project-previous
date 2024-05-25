@@ -9,14 +9,7 @@ import csv
 import os
 
 
-
-#config = SWC_Config("https://swc-api-container.86jt1rvv5bo8k.us-west-2.cs.amazonlightsail.com")
-#config = SWC_Config(timeout=10.0)
-#config = SWC_Config("https://api.sportsworldcentral-false.com", backoff=False)
-#config = SWC_Config("https://api.sportsworldcentral-false.com")
-config = SWC_Config()
-
-
+config = SWC_Config("http://127.0.0.1:8000")
 client = SWC_Client(config)
 
 current_dir = os.path.dirname(__file__)

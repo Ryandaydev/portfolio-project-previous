@@ -3,8 +3,8 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyswc"
-version = "0.0.3"
+name = "PySWC"
+version = "0.0.4"
 authors = [
   { name="Ryan D", email="ryan@hands-on-api-book.com" },
 ]
