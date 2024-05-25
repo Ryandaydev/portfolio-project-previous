@@ -7,7 +7,7 @@ class SWC_Client:
     def __init__(self):
 
         #initial with config values
-        self.swc_base_url = ""
+        self.swc_base_url = "https://api.sportsworldcentral.com"
 
     #analytics endpoints
     def health_check(self):
