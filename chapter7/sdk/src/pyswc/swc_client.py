@@ -30,20 +30,20 @@ class SWCClient:
         self.backoff_max_time = input_config.swc_backoff_max_time
 
     def get_url(self, url: str) -> httpx.Response:
-            """Makes API call and logs errors."""
-            try:
-                with httpx.Client(base_url=self.swc_base_url) as client:
-                        response = client.get(url)
-                        self.logger.debug(response.json())
-                        return response
-            except httpx.HTTPStatusError as e:
-                self.logger.error(f"HTTP status error occurred: {e.response.status_code} {e.response.text}")
-                raise
-            except httpx.RequestError as e:
-                self.logger.error(f"Request error occurred: {str(e)}")
-                raise
-
-
+        """Makes API call and logs errors."""
+        try:
+            with httpx.Client(base_url=self.swc_base_url) as client:
+                response = client.get(url)
+                self.logger.debug(response.json())
+                return response
+        except httpx.HTTPStatusError as e:
+            self.logger.error(
+                f"HTTP status error occurred: {e.response.status_code} {e.response.text}"
+            )
+            raise
+        except httpx.RequestError as e:
+            self.logger.error(f"Request error occurred: {str(e)}")
+            raise
 
     def get_health_check(self) -> httpx.Response:
         """Checks if API is running and healthy.
