@@ -1,18 +1,45 @@
-#configuration file
+class SWCConfig:
+    """Configuration class containing arguments for the SDK client.
 
-default_url = "https://api.sportsworldcentral.com"
+    Contains configuration for the base URL along with several
+    parameters used to configure the progressive backoff feature
+    of the SDK, which prevents the SDK from overwhelming the
+    API with requests.
 
-class SWC_Config:
+    Typical usage example:
+
+    config = SWC_Config("http://127.0.0.1:8000")
+    client = SWC_Client(config)
+    """
+
+    DEFAULT_URL = "https://api.sportsworldcentral.com"
+
     swc_base_url: str
-    swc_timeout: int
     swc_backoff: bool
     swc_backoff_max_time: int
 
-    def __init__(self, url: str = default_url, timeout: float = 5.0, backoff: bool = True, backoff_max_time: int = 30):
+    def __init__(
+        self, url: str = DEFAULT_URL, backoff: bool = True, backoff_max_time: int = 30
+    ):
+        """Constructor for configuration class.
+
+        Configuration object containing arguments for the SDK client.
+        Contains configuration for the base URL along with several
+        parameters used to configure the progressive backoff feature
+        of the SDK, which prevents the SDK from overwhelming the
+        API with requests.
+
+        Args:
+        swc_base_url (optional):
+            The base URL to use for all the API calls.
+        swc_backoff:
+            A boolean that determines if the SDK should
+            retry the call using backoff when errors occur.
+        swc_backoff_max_time:
+            The max number of seconds the SDK should keep
+            trying an API call before stopping. Used in
+            combination the backoff."""
+
         self.swc_base_url = url
-        self.swc_timeout = timeout
         self.swc_backoff = backoff
         self.swc_backoff_max_time = backoff_max_time
-
-    def __str__(self):
-         return f"{self.swc_base_url} {self.swc_timeout} {self.swc_backoff} {self.swc_backoff_max_time}"

@@ -1,7 +1,8 @@
 import httpx
+import pyswc.swc_config as config
 
 
-class SWC_Client:
+class SWCClient:
     """Interacts with the Sports World Central API.
 
         This SDK class simplifies the process of using the SWC fantasy
@@ -10,21 +11,23 @@ class SWC_Client:
 
     Typical usage example:
 
-        client = SWC_Client()
+        client = SWCClient()
         response = client.get_health_check()
-
     """
 
     HEALTH_CHECK_ENDPOINT = "/"
 
-    def __init__(self, swc_base_url: str) -> None:
-        """Class constructor that sets the base URL."""
-        self.swc_base_url = swc_base_url
+    def __init__(self, input_config: config.SWCConfig):
+        """Class constructor that sets varibles from configuration object"""
+
+        self.swc_base_url = input_config.swc_base_url
+        self.backoff = input_config.swc_backoff
+        self.backoff_max_time = input_config.swc_backoff_max_time
 
     def get_health_check(self) -> httpx.Response:
         """Checks if API is running and healthy.
 
-        Calls the API healtch check endpoint and returns a standard
+        Calls the API health check endpoint and returns a standard
         message if the API is running normally. Can be used to check
         status of API before making more complicated API calls.
 
