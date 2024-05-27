@@ -1,5 +1,6 @@
 import httpx
 import pyswc.swc_config as config
+import logging
 
 
 class SWCClient:
@@ -13,16 +14,36 @@ class SWCClient:
 
         client = SWCClient()
         response = client.get_health_check()
+
     """
 
     HEALTH_CHECK_ENDPOINT = "/"
 
     def __init__(self, input_config: config.SWCConfig):
-        """Class constructor that sets varibles from configuration object"""
+        """Class constructor that sets varibles from configuration object."""
+
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Input config: " + str(input_config))
 
         self.swc_base_url = input_config.swc_base_url
         self.backoff = input_config.swc_backoff
         self.backoff_max_time = input_config.swc_backoff_max_time
+
+    def get_url(self, url: str) -> httpx.Response:
+            """Makes API call and logs errors."""
+            try:
+                with httpx.Client(base_url=self.swc_base_url) as client:
+                        response = client.get(url)
+                        self.logger.debug(response.json())
+                        return response
+            except httpx.HTTPStatusError as e:
+                self.logger.error(f"HTTP status error occurred: {e.response.status_code} {e.response.text}")
+                raise
+            except httpx.RequestError as e:
+                self.logger.error(f"Request error occurred: {str(e)}")
+                raise
+
+
 
     def get_health_check(self) -> httpx.Response:
         """Checks if API is running and healthy.
@@ -36,6 +57,6 @@ class SWCClient:
           JSON response and other information received from the API.
 
         """
-        # make the API call
-        with httpx.Client(base_url=self.swc_base_url) as client:
-            return client.get(self.HEALTH_CHECK_ENDPOINT)
+        self.logger.debug("Entered health check")
+        endpoint_url = self.HEALTH_CHECK_ENDPOINT
+        return self.get_url(endpoint_url)

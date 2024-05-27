@@ -47,3 +47,7 @@ class SWCConfig:
         self.swc_base_url = url
         self.swc_backoff = backoff
         self.swc_backoff_max_time = backoff_max_time
+
+    def __str__(self):
+         """Stringify function to return contents of config object for logging"""
+         return f"{self.swc_base_url} {self.swc_backoff} {self.swc_backoff_max_time}"
