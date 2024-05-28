@@ -18,5 +18,6 @@ classifiers = [
 ]
 dependencies = [
        'pytest>=8.1',
-       'httpx>=0.27.0'
+       'httpx>=0.27.0',
+       'pydantic>=2.4.0,<2.5.0'
 ]

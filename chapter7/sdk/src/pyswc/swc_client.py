@@ -1,6 +1,10 @@
 import httpx
 import pyswc.swc_config as config
 import logging
+from urllib.parse import urlencode
+from .schemas import League
+from typing import List
+import backoff
 
 
 class SWCClient:
@@ -18,6 +22,7 @@ class SWCClient:
     """
 
     HEALTH_CHECK_ENDPOINT = "/"
+    GET_LEAGUES_ENDPOINT = "/v0/leagues/"
 
     def __init__(self, input_config: config.SWCConfig):
         """Class constructor that sets varibles from configuration object."""
@@ -28,6 +33,14 @@ class SWCClient:
         self.swc_base_url = input_config.swc_base_url
         self.backoff = input_config.swc_backoff
         self.backoff_max_time = input_config.swc_backoff_max_time
+
+        if self.backoff:
+            self.get_url = backoff.on_exception(
+                wait_gen=backoff.expo,
+                exception=(httpx.RequestError, httpx.HTTPStatusError),
+                max_time=self.backoff_max_time,
+                jitter=backoff.random_jitter,
+            )(self.get_url)
 
     def get_url(self, url: str) -> httpx.Response:
         """Makes API call and logs errors."""
@@ -60,3 +73,45 @@ class SWCClient:
         self.logger.debug("Entered health check")
         endpoint_url = self.HEALTH_CHECK_ENDPOINT
         return self.get_url(endpoint_url)
+
+    def build_url(self, endpoint, params=None) -> str:
+        """Converts dictionary of parameters to query string and appends to URL"""
+        if params:
+            params_dict = {
+                key: value for (key, value) in params.items() if value is not None
+            }
+            query_string = urlencode(params_dict)
+            full_url = endpoint + "?" + query_string
+        else:
+            full_url = endpoint
+        return full_url
+
+    def get_leagues(
+        self,
+        skip: int = 0,
+        limit: int = 100,
+        minimum_last_changed_date: str = None,
+        league_name: str = None,
+    ) -> List[League]:
+        """Returns a List of Leagues filtered by parameters.
+
+        Calls the API v0/leagues endpoint and returns a list of
+        League objects.
+
+        Returns:
+        A List of schemas.League objects. Each represents one
+        SportsWorldCentral fantasy league.
+
+        """
+        self.logger.debug("Entered get leagues")
+
+        params = {
+            "skip": skip,
+            "limit": limit,
+            "minimum_last_changed_date": minimum_last_changed_date,
+            "league_name": league_name,
+        }
+
+        endpoint_url = self.build_url(self.GET_LEAGUES_ENDPOINT, params)
+        response = self.get_url(endpoint_url)
+        return [League(**league) for league in response.json()]
