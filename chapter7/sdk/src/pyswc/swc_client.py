@@ -22,7 +22,7 @@ class SWCClient:
     """
 
     HEALTH_CHECK_ENDPOINT = "/"
-    GET_LEAGUES_ENDPOINT = "/v0/leagues/"
+    LIST_LEAGUES_ENDPOINT = "/v0/leagues/"
 
     BULK_FILE_BASE_URL = ("https://raw.githubusercontent.com/ryandaydev" + 
                             "/portfolio-project/main/chapter7/sdk/bulk/")
@@ -97,7 +97,7 @@ class SWCClient:
             full_url = endpoint
         return full_url
 
-    def get_leagues(
+    def list_leagues(
         self,
         skip: int = 0,
         limit: int = 100,
@@ -123,12 +123,12 @@ class SWCClient:
             "league_name": league_name,
         }
 
-        endpoint_url = self.build_url(self.GET_LEAGUES_ENDPOINT, params)
+        endpoint_url = self.build_url(self.LIST_LEAGUES_ENDPOINT, params)
         
         response = self.get_url(endpoint_url)
         return [League(**league) for league in response.json()]
 
-    def get_bulk_players(self) -> bytes:
+    def get_bulk_player_file(self) -> bytes:
         """Returns a CSV file with player data"""
 
         self.logger.debug("Entered get bulk players")
