@@ -16,13 +16,14 @@ from pyswc import SWCClient
 from pyswc import SWCConfig
 
 config = SWCConfig(url="http://127.0.0.1:8000",backoff=False)
-    client = SWCClient(config)    
-    leagues_response = client.list_leagues()
+client = SWCClient(config)    
+leagues_response = client.list_leagues()
+print(leagues_response)
+```
 
 ### Example of bulk data functions
 
 The build data endpoint return a bytes object. Here is an example of saving a file locally from a bulk file endpoint:
-```
 
 ```python
 import csv
