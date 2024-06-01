@@ -1,7 +1,11 @@
 # Pyswc software development kit (SDK)
-This is the python SDK to to interact with the SportsWorldCentral Football API, which was created for the book Hands-On APIs for AI and Data Science. 
+This is the python SDK to to interact with the SportsWorldCentral Football API, which was created for the book [Hands-On APIs for AI and Data Science](https://hands-on-api-book.com).
 
-You can read more about this book at: https://hands-on-api-book.com
+## Installing pyswc
+
+To install this SDK in your environment, execute the following command:
+
+`pip install pyswc@git+https://github.com/{owner of repo}/portfolio-project#subdirectory=chapter7/sdk`
 
 ## Example Usage
 
@@ -42,7 +46,3 @@ config = SWCConfig()
     with open(output_file_path, 'wb') as f:
         f.write(player_file)
 ```
-
-## Data Validation
-
-The SDK functions return Python objects defined by the Pydantic schemas in /schemas/schemas.py. Information on using Pydantic is avaialable here: https://docs.pydantic.dev/latest/
