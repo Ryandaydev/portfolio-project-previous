@@ -15,10 +15,13 @@ Thanks for using the Sports World Central API. This is your one-stop-shop for ac
 - [Example Code](#example-code)
 - [Software Development Kit (SDK)](#software-development-kit-sdk)
 
-## Public API 
-*Coming Soon*
+## Public API
 
-We'll be deploying our application soon. Check back for the public API address.
+Our API is hosted at [API URL]/([API URL]/). 
+
+You can access the interactive documentation at [[API URL]/docs]([API URL]/docs).
+
+You can view the OpenAPI Specification (OAS) file at [[API URL]/openapi.json]([API URL]/openapi.json).
 
 ## Getting Started
 
@@ -61,7 +64,6 @@ with httpx.Client(base_url=self.swc_base_url) as client:
 ```
 
 ## Software Development Kit (SDK)
-*Coming Soon*
 
-Check back for the Python SDK for our API.
+If you are a Python user, you can use the PySWC SDK to interact with our API. Full information is available [here](sdk/README.md).
 
