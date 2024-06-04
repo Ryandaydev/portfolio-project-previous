@@ -1,22 +1,7 @@
 class SWCConfig:
     """Configuration class containing arguments for the SDK client.
 
-    Contains configuration for the base URL along with several
-    parameters used to configure the progressive backoff feature
-    of the SDK, which prevents the SDK from overwhelming the
-    API with requests.
-
-    Typical usage example with all defaults:
-    config = SWC_Config("http://127.0.0.1:8000")
-    client = SWC_Client(config)
-
-    Typical usage example specifying all the parameters:
-    config = SWC_Config(swc_base_url = "http://127.0.0.1:8000",
-                        swc_backoff = True,
-                        swc_backoff_max_time = 15)
-    client = SWC_Client(config)
-
-
+    Contains configuration for the base URL and progressive backoff.
     """
 
     DEFAULT_URL = "https://api.sportsworldcentral.com"
@@ -30,9 +15,7 @@ class SWCConfig:
     ):
         """Constructor for configuration class.
 
-        Contains configuration for the base URL along with several
-        parameters used to configure the progressive backoff feature,
-        which prevents the SDK from overwhelming the API with requests.
+        Contains initialization values to overwrite defaults.
 
         Args:
         swc_base_url (optional):
