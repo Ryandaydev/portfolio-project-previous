@@ -1,12 +1,6 @@
 # Pyswc software development kit (SDK)
 This is the python SDK to to interact with the SportsWorldCentral Football API, which was created for the book [Hands-On APIs for AI and Data Science](https://hands-on-api-book.com).
 
-## Installing pyswc
-
-To install this SDK in your environment, execute the following command:
-
-`pip install pyswc@git+https://github.com/{owner of repo}/portfolio-project#subdirectory=chapter7/sdk`
-
 ## Example Usage
 
 This SDK implements all the endpoints in the SWC API, in addition to providing bulk downloads of the SWC fantasy data in CSV format.

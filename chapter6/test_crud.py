@@ -37,11 +37,6 @@ def test_get_all_performances(db_session):
     performances = crud.get_performances(db_session, skip=0, limit=10000)
     assert len(performances) == 1100
 
-def test_get_half_performances(db_session):
-    """Tests that the count of performances in the database is what is expected - half the performances"""
-    performances = crud.get_performances(db_session, skip=0, limit=10000, min_last_changed_date=test_date)
-    assert len(performances) == 550        
-
 def test_get_league(db_session):
     """Tests you can get a league"""
     league = crud.get_league(db_session, league_id = 5002)

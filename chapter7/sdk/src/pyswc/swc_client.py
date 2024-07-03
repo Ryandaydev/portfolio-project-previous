@@ -33,14 +33,6 @@ class SWCClient:
         + "/portfolio-project/main/chapter7/sdk/bulk/"
     )
 
-    BULK_FILE_NAMES = {
-        "players": "player_data.csv",
-        "leagues": "league_data.csv",
-        "performances": "performance_data.csv",
-        "teams": "team_data.csv",
-        "team_players": "team_player_data.csv",
-    }
-
     def __init__(self, input_config: config.SWCConfig):
         """Class constructor that sets varibles from configuration object."""
 
@@ -50,6 +42,15 @@ class SWCClient:
         self.swc_base_url = input_config.swc_base_url
         self.backoff = input_config.swc_backoff
         self.backoff_max_time = input_config.swc_backoff_max_time
+        self.bulk_file_format = input_config.swc_bulk_file_format
+
+        self.BULK_FILE_NAMES = {
+        "players": "player_data",
+        "leagues": "league_data",
+        "performances": "performance_data",
+        "teams": "team_data",
+        "team_players": "team_player_data"
+    }
 
         if self.backoff:
             self.get_url = backoff.on_exception(
@@ -58,6 +59,12 @@ class SWCClient:
                 max_time=self.backoff_max_time,
                 jitter=backoff.random_jitter,
             )(self.get_url)
+
+        if self.bulk_file_format.lower() == "parquet":
+            self.BULK_FILE_NAMES = {key: value + ".parquet" for key, value in self.BULK_FILE_NAMES.items()}
+        else:
+            self.BULK_FILE_NAMES = {key: value + ".csv" for key, value in self.BULK_FILE_NAMES.items()}
+
 
     def get_url(self, url: str) -> httpx.Response:
         """Makes API call and logs errors."""
@@ -267,7 +274,7 @@ class SWCClient:
     # bulk endpoints -------------
 
     def get_bulk_player_file(self) -> bytes:
-        """Returns a CSV file with player data"""
+        """Returns a bulk file with player data"""
 
         self.logger.debug("Entered get bulk player file")
 
@@ -280,7 +287,7 @@ class SWCClient:
             return response.content
 
     def get_bulk_league_file(self) -> bytes:
-        """Returns a CSV file with league data"""
+        """Returns a bulk file with league data"""
 
         self.logger.debug("Entered get bulk league file")
 
@@ -293,7 +300,7 @@ class SWCClient:
             return response.content
 
     def get_bulk_performance_file(self) -> bytes:
-        """Returns a CSV file with performance data"""
+        """Returns a bulk file with performance data"""
 
         self.logger.debug("Entered get bulk performance file")
 
@@ -308,7 +315,7 @@ class SWCClient:
             return response.content
 
     def get_bulk_team_file(self) -> bytes:
-        """Returns a CSV file with team data"""
+        """Returns a bulk file with team data"""
 
         self.logger.debug("Entered get bulk team file")
 
@@ -321,7 +328,7 @@ class SWCClient:
             return response.content
 
     def get_bulk_team_player_file(self) -> bytes:
-        """Returns a CSV file with team player data"""
+        """Returns a bulk file with team player data"""
 
         self.logger.debug("Entered get bulk team player file")
 
